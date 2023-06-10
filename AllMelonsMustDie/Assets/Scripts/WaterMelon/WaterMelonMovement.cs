@@ -40,16 +40,17 @@ public class WaterMelonMovement : MonoBehaviour{
         {
             isJumping = true;
 
-            Vector3 jumpDirection = transform.position - playerLocation;
+            Vector3 jumpDirection = playerLocation - transform.position; // Reverse the subtraction order
             jumpDirection.Normalize();
 
             // Apply the jump forces
-            rb.AddForce(jumpDirection * forwardForce, ForceMode.VelocityChange);
+            rb.AddForce(-jumpDirection * forwardForce, ForceMode.VelocityChange); // Add a negative sign to make the enemy jump in the opposite direction
             rb.AddForce(transform.up * upwardForce, ForceMode.VelocityChange);
 
             StartCoroutine(WaitAndResetJump());
         }
     }
+
 
     IEnumerator WaitAndResetJump()
     {
