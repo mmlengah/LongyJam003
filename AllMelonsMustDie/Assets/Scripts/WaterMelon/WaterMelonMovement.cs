@@ -3,30 +3,30 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(WaterMelonCollision))]
-public class WaterMelonMovement : MonoBehaviour
-{
-    // Reference to WaterMelonCollision script
+[RequireComponent(typeof(WaterMelonAnimation))]
+public class WaterMelonMovement : MonoBehaviour{
+
     private WaterMelonCollision waterMelonCollision;
+    private WaterMelonAnimation waterMelonAnimation;
 
     private float forwardForce = 1f;
-
-    private float upwardForce = 1f;
-
+    private float upwardForce = 3f;
     private float jumpInterval = 1f;
 
     private bool isMoving = false;
-
     private bool isJumping = false;
 
     private Rigidbody rb;
-
     private Vector3 playerLocation;
 
     void Start()
     {
-        waterMelonCollision = GetComponent<WaterMelonCollision>();
         rb = GetComponent<Rigidbody>();
+        waterMelonCollision = GetComponent<WaterMelonCollision>();
+        waterMelonAnimation = GetComponent<WaterMelonAnimation>();        
+        
         waterMelonCollision.onShouldMove.AddListener(ShouldMove);
+        waterMelonAnimation.onShouldSquashAndUnsquash.AddListener(Jump);
     }
 
     void Update()
@@ -34,26 +34,33 @@ public class WaterMelonMovement : MonoBehaviour
         Move();
     }
 
-    IEnumerator Jump()
+    void Jump()
     {
-        isJumping = true;
+        if (!isJumping)
+        {
+            isJumping = true;
 
-        Vector3 jumpDirection = transform.position - playerLocation;
-        jumpDirection.Normalize();
+            Vector3 jumpDirection = transform.position - playerLocation;
+            jumpDirection.Normalize();
 
-        // Apply the jump forces
-        rb.AddForce(jumpDirection * forwardForce, ForceMode.VelocityChange);
-        rb.AddForce(transform.up * upwardForce, ForceMode.VelocityChange);
+            // Apply the jump forces
+            rb.AddForce(jumpDirection * forwardForce, ForceMode.VelocityChange);
+            rb.AddForce(transform.up * upwardForce, ForceMode.VelocityChange);
 
+            StartCoroutine(WaitAndResetJump());
+        }
+    }
+
+    IEnumerator WaitAndResetJump()
+    {
         yield return new WaitForSeconds(jumpInterval);
-
         isJumping = false;
     }
 
     private void Move()
     {
         if (!isMoving || isJumping) return;
-        StartCoroutine(Jump());
+        waterMelonAnimation.SquashAndUnsquash();
     }
 
     private void ShouldMove(bool b, Vector3 p)
