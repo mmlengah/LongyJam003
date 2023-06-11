@@ -7,7 +7,7 @@ using UnityEngine.Events;
 public class WaterMelonCollision : MonoBehaviour
 {
     public UnityEvent<bool, Vector3> onShouldMove;
-    private string playerName = "Cube (1)";
+    private string playerName = "Player";
 
     // Structure to hold Rigidbody state
     private struct RigidbodyState
