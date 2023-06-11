@@ -5,30 +5,41 @@ using UnityEngine.Events;
 
 public class WaterMelonAnimation : MonoBehaviour
 {
-    public UnityEvent onShouldSquashAndUnsquash = new UnityEvent();
+    private WaterMelonMovement waterMelonMovement;
 
     public float squashFactor = 0.5f;
-    public float squashDuration = 0.1f;
+    public float squashDuration = 0.25f;
 
     private Vector3 originalScale;
 
     void Start()
     {
         originalScale = transform.localScale;
+
+        waterMelonMovement = GetComponent<WaterMelonMovement>();
+        waterMelonMovement.squash.AddListener(StartSquash);
+        waterMelonMovement.unsquash.AddListener(StartUnsquash);
     }
 
-    public void SquashAndUnsquash()
+    private void StartSquash()
     {
-        StartCoroutine(SquashAndUnsquashCoroutine());
+        StartCoroutine(Squash());
     }
 
-    IEnumerator SquashAndUnsquashCoroutine()
+    private void StartUnsquash()
+    {
+        StartCoroutine(Unsquash());
+    }
+
+    private IEnumerator Squash()
     {
         // Squash
         yield return ScaleOverTime(new Vector3(originalScale.x, originalScale.y * squashFactor, originalScale.z), squashDuration);
+    }
 
-        // Invoke the event to signal that the squash is complete
-        onShouldSquashAndUnsquash.Invoke();
+    private IEnumerator Unsquash()
+    {
+        yield return new WaitForSeconds(squashDuration);
 
         // Unsquash
         yield return ScaleOverTime(originalScale, squashDuration);

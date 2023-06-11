@@ -329,7 +329,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 863283485}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.33, y: 1.137883, z: -1.75}
+  m_LocalPosition: {x: 2.33, y: 1.137883, z: -0.28}
   m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -376,6 +376,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ddf716bc2005ecb409c769a4f3ab6350, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  squash:
+    m_PersistentCalls:
+      m_Calls: []
+  unsquash:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!114 &863283495
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -403,9 +409,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 85de6bf15a8a58148a72da020db5a4f6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  onShouldSquashAndUnsquash:
-    m_PersistentCalls:
-      m_Calls: []
   squashFactor: 0.1
   squashDuration: 0.1
 --- !u!1 &963194225
@@ -680,7 +683,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1453898374}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.17, y: 1.137883, z: -3}
+  m_LocalPosition: {x: 3.04, y: 1.137883, z: -1.39}
   m_LocalScale: {x: 0.4, y: 0.4, z: 0.4}
   m_ConstrainProportionsScale: 0
   m_Children: []

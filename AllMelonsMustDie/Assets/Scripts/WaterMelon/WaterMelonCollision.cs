@@ -6,14 +6,23 @@ using UnityEngine.Events;
 public class WaterMelonCollision : MonoBehaviour
 {
     public UnityEvent<bool, Vector3> onShouldMove;
+    private string playerName = "Cube (1)";
 
     private void OnTriggerEnter(Collider other)
     {
-        onShouldMove.Invoke(true, other.transform.position);
+        if(other.gameObject.name == playerName)
+        {
+            onShouldMove.Invoke(true, other.transform.position);
+        }
+        
     }
 
     private void OnTriggerExit(Collider other)
     {
-        onShouldMove.Invoke(false, Vector3.zero);
+        if (other.gameObject.name == playerName)
+        {
+            onShouldMove.Invoke(false, Vector3.zero);
+        }
+        
     }
 }

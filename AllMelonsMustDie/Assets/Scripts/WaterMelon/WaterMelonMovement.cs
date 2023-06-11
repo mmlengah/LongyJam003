@@ -1,13 +1,15 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 [RequireComponent(typeof(WaterMelonCollision))]
-[RequireComponent(typeof(WaterMelonAnimation))]
 public class WaterMelonMovement : MonoBehaviour{
 
     private WaterMelonCollision waterMelonCollision;
-    private WaterMelonAnimation waterMelonAnimation;
+    
+    public UnityEvent squash;
+    public UnityEvent unsquash;
 
     private float forwardForce = 1f;
     private float upwardForce = 3f;
@@ -22,11 +24,9 @@ public class WaterMelonMovement : MonoBehaviour{
     void Start()
     {
         rb = GetComponent<Rigidbody>();
-        waterMelonCollision = GetComponent<WaterMelonCollision>();
-        waterMelonAnimation = GetComponent<WaterMelonAnimation>();        
+        waterMelonCollision = GetComponent<WaterMelonCollision>();       
         
         waterMelonCollision.onShouldMove.AddListener(ShouldMove);
-        waterMelonAnimation.onShouldSquashAndUnsquash.AddListener(Jump);
     }
 
     void Update()
@@ -36,19 +36,22 @@ public class WaterMelonMovement : MonoBehaviour{
 
     void Jump()
     {
-        if (!isJumping)
-        {
-            isJumping = true;
+        //squash here
+        squash.Invoke();
 
-            Vector3 jumpDirection = playerLocation - transform.position; // Reverse the subtraction order
-            jumpDirection.Normalize();
+        isJumping = true;
 
-            // Apply the jump forces
-            rb.AddForce(-jumpDirection * forwardForce, ForceMode.VelocityChange); // Add a negative sign to make the enemy jump in the opposite direction
-            rb.AddForce(transform.up * upwardForce, ForceMode.VelocityChange);
+        Vector3 jumpDirection = playerLocation - transform.position; // Reverse the subtraction order
+        jumpDirection.Normalize();
 
-            StartCoroutine(WaitAndResetJump());
-        }
+        // Apply the jump forces
+        rb.AddForce(-jumpDirection * forwardForce, ForceMode.VelocityChange); // Add a negative sign to make the enemy jump in the opposite direction
+        rb.AddForce(transform.up * upwardForce, ForceMode.VelocityChange);
+
+        StartCoroutine(WaitAndResetJump());
+
+        //unsquash
+        unsquash.Invoke();
     }
 
 
@@ -61,7 +64,7 @@ public class WaterMelonMovement : MonoBehaviour{
     private void Move()
     {
         if (!isMoving || isJumping) return;
-        waterMelonAnimation.SquashAndUnsquash();
+        Jump();
     }
 
     private void ShouldMove(bool b, Vector3 p)
