@@ -21,17 +21,30 @@ public class WaterMelonMovement : MonoBehaviour{
     private Rigidbody rb;
     private Vector3 playerLocation;
 
+    private Quaternion currentRotation;
+    private Quaternion desiredRotation;
+
+
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         waterMelonCollision = GetComponent<WaterMelonCollision>();       
         
         waterMelonCollision.onShouldMove.AddListener(ShouldMove);
+
+        currentRotation = transform.rotation;
     }
 
     void Update()
     {
         Move();
+
+        if (isMoving)
+        {
+            float rotationSpeed = 5.0f; // control the speed of rotation
+            currentRotation = Quaternion.Lerp(currentRotation, desiredRotation, Time.deltaTime * rotationSpeed);
+            transform.rotation = currentRotation;
+        }
     }
 
     void Jump()
@@ -41,12 +54,15 @@ public class WaterMelonMovement : MonoBehaviour{
 
         isJumping = true;
 
-        Vector3 jumpDirection = playerLocation - transform.position; // Reverse the subtraction order
+        Vector3 jumpDirection = transform.position - playerLocation;
+        jumpDirection.y = 0;
         jumpDirection.Normalize();
 
+        desiredRotation = Quaternion.LookRotation(-jumpDirection);
+
         // Apply the jump forces
-        rb.AddForce(-jumpDirection * forwardForce, ForceMode.VelocityChange); // Add a negative sign to make the enemy jump in the opposite direction
-        rb.AddForce(transform.up * upwardForce, ForceMode.VelocityChange);
+        rb.AddForce(jumpDirection * forwardForce, ForceMode.VelocityChange); 
+        rb.AddForce(transform.up * upwardForce, ForceMode.VelocityChange);        
 
         StartCoroutine(WaitAndResetJump());
 
