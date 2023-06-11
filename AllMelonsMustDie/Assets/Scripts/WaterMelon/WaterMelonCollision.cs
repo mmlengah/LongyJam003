@@ -41,7 +41,7 @@ public class WaterMelonCollision : MonoBehaviour
     private void OnCollisionEnter(Collision collision)
     {
         // Check if the collision is with the player
-        if (collision.gameObject.name == playerName)
+        if (collision.gameObject.name == "Stick" && pAttack.IsAttacking)
         {
             StartCoroutine(Death());
         }
