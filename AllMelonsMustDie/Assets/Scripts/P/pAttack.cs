@@ -11,6 +11,9 @@ public class pAttack : MonoBehaviour
 
     public Transform playerTransform;
 
+    // Add a weight to the left vector
+    public float leftWeight = 1.5f;
+
     public static bool IsAttacking
     {
         get { return isAttacking; }
@@ -41,8 +44,11 @@ public class pAttack : MonoBehaviour
         Vector3 forward = playerTransform.forward;
         Vector3 left = playerTransform.right;
 
+        // Modify the left vector by multiplying it by leftWeight
+        left *= leftWeight;
+
         // Create a rotation that rotates maxSwingAngle degrees around the combination of forward and left vectors
-        Quaternion targetRotation = Quaternion.AngleAxis(maxSwingAngle, forward + left) * startRotation;
+        Quaternion targetRotation = Quaternion.AngleAxis(maxSwingAngle, (forward + left).normalized) * startRotation;
 
         while (elapsedTime < swingTime)
         {
@@ -63,3 +69,4 @@ public class pAttack : MonoBehaviour
     }
 
 }
+

@@ -74,6 +74,8 @@ public class WaterMelonCollision : MonoBehaviour
         // Wait for 1 second
         yield return new WaitForSeconds(1f);
 
+        Spawn.CurrentObjects--;
+        Stop.tmpText.text = (int.Parse(Stop.tmpText.text) + 1).ToString();
         Destroy(gameObject);
     }
 }

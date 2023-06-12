@@ -1,17 +1,24 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
-public class Pause : MonoBehaviour
+public class Stop : MonoBehaviour
 {
     public GameObject pauseMenu;
+    public GameObject ui;
+
+    public static TMP_Text tmpText;
 
     private bool isPaused = false;
 
     private void Start()
     {
+        tmpText = ui.transform.GetChild(0).transform.GetChild(0).GetComponent<TMP_Text>();
         pauseMenu.SetActive(false);
+        ui.SetActive(true);
     }
 
     private void Update()
@@ -36,6 +43,7 @@ public class Pause : MonoBehaviour
         Cursor.lockState = CursorLockMode.None; // Unlock the cursor
         Cursor.visible = true; // Show the mouse cursor
         pauseMenu.SetActive(true); // Show the pause menu
+        ui.SetActive(false); 
     }
 
     private void ResumeGame()
@@ -45,6 +53,7 @@ public class Pause : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false; // Hide the mouse cursor
         pauseMenu.SetActive(false); // Hide the pause menu
+        ui.SetActive(true);
     }
 
     public void ResumeButton()
